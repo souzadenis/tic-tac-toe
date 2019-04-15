@@ -12,6 +12,7 @@ const tic_tac_toe = {
             },
     container_element: null,
     gameover: false,
+    catsgame: false,
     winning_sequences: [
                         [0,1,2],
                         [3,4,5],
@@ -36,7 +37,11 @@ const tic_tac_toe = {
             let winning_sequences_index = this.check_winning_sequences( this.symbols.options[this.symbols.turn_index] );
             if (winning_sequences_index >= 0){
                 this.game_is_over();
-            } else{
+            }
+            else if (this.check_is_catsgame()) {
+                this.game_is_cat();
+            }
+            else {
                 this.symbols.change();
             }
             return true;
@@ -49,19 +54,33 @@ const tic_tac_toe = {
     check_winning_sequences: function(simbol) {
 
         for ( i in this.winning_sequences ) {
-            if (this.board[ this.winning_sequences[i][0] ] == simbol  &&
-                this.board[ this.winning_sequences[i][1] ] == simbol &&
-                this.board[ this.winning_sequences[i][2] ] == simbol) {
+            if (this.board[ this.winning_sequences[i][0] ] === simbol  &&
+                this.board[ this.winning_sequences[i][1] ] === simbol &&
+                this.board[ this.winning_sequences[i][2] ] === simbol) {
                 console.log('winning sequences INDEX:' + i);
                 return i;
             }
-        };
+        }
         return -1;
+    },
+
+    check_is_catsgame: function () {
+
+        for (i in this.board) {
+            if (this.board[i] === '')
+                return false;
+        }
+        return true;
     },
 
     game_is_over: function() {
         this.gameover = true;
-        console.log('GAME OVER');
+        console.log('GAME OVER!');
+    },
+
+    game_is_cat: function() {
+        this.catsgame = true;
+        console.log('CAT\'S GAME!');
     },
 
     start: function() {
@@ -75,8 +94,8 @@ const tic_tac_toe = {
 
         for ( i in this.board ) {
             content += '<div onclick="tic_tac_toe.make_play(' + i + ')">' + this.board[i] + '</div>';
-        };
+        }
 
         this.container_element.innerHTML = content;
-    },
+    }
 };
